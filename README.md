@@ -1,670 +1,87 @@
-# proyecto
-Final proyecto del Código (aplicación)
-
-file:///C:/Users/lizbe/OneDrive/Datos%20adjuntos/nueva_api/proyec.html
-
-!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OpenPayments - Iniciar Sesión</title>
-    <style>
-        :root {
-            --primary: #1e3c72;
-            --secondary: #2a5298;
-            --success: #28a745;
-            --danger: #dc3545;
-            --light: #f8f9fa;
-            --dark: #343a40;
-        }
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        body {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            color: #333;
-            min-height: 100vh;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .container {
-            max-width: 1200px;
-            width: 100%;
-            margin: 0 auto;
-        }
-        header {
-            text-align: center;
-            padding: 30px 0;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            border-radius: 12px;
-            margin-bottom: 30px;
-            width: 100%;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-        }
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-        }
-        .tagline {
-            font-size: 1.1rem;
-            opacity: 0.9;
-        }
-
-        /* Login Form */
-        .login-section, .register-section, .app-section {
-            background: white;
-            border-radius: 12px;
-            padding: 40px;
-            margin: 20px auto;
-            max-width: 500px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
-        }
-        .hidden {
-            display: none !important;
-        }
-
-        label {
-            display: block;
-            margin: 15px 0 8px;
-            font-weight: 600;
-            color: var(--dark);
-        }
-        input, select, textarea {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e9ecef;
-            border-radius: 8px;
-            font-size: 16px;
-            transition: border-color 0.3s;
-        }
-        input:focus, select:focus, textarea:focus {
-            outline: none;
-            border-color: var(--primary);
-        }
-
-        .btn {
-            background: var(--primary);
-            color: white;
-            padding: 14px 28px;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            margin: 10px 5px;
-            transition: all 0.3s;
-        }
-        .btn:hover {
-            background: var(--secondary);
-            transform: translateY(-2px);
-        }
-        .btn-secondary {
-            background: #6c757d;
-        }
-        .btn-success {
-            background: var(--success);
-        }
-        .btn-danger {
-            background: var(--danger);
-        }
-        .btn-link {
-            background: transparent;
-            color: var(--primary);
-            padding: 5px;
-            text-decoration: underline;
-            display: inline-block;
-            margin: 0;
-        }
-        .btn-link:hover {
-            background: transparent;
-            transform: none;
-            color: var(--secondary);
-        }
-
-        .result {
-            padding: 20px;
-            margin: 20px 0;
-            border-radius: 8px;
-            background: #e9f7ef;
-            border-left: 5px solid var(--success);
-            display: none;
-        }
-
-        .status-badge {
-            display: inline-block;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: bold;
-            text-transform: uppercase;
-        }
-        .status-created { background: #fff3cd; color: #856404; }
-        .status-validated { background: #d1ecf1; color: #0c5460; }
-        .status-paid { background: #d4edda; color: #155724; }
-        .status-completed { background: #d4edda; color: #155724; font-weight: bold; }
-        .status-failed { background: #f8d7da; color: #721c24; }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-            margin-top: 20px;
-        }
-        .remittance-card {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 10px;
-            border: 1px solid #e9ecef;
-        }
-        .remittance-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-        .remittance-title {
-            font-weight: 600;
-            color: var(--dark);
-        }
-        .remittance-id {
-            font-size: 14px;
-            color: #6c757d;
-        }
-        .remittance-detail {
-            margin: 8px 0;
-            display: flex;
-            justify-content: space-between;
-        }
-        .detail-label { font-weight: 500; color: #495057; }
-        .detail-value { font-weight: 600; }
-
-        footer {
-            text-align: center;
-            padding: 30px 0;
-            color: #6c757d;
-            font-size: 14px;
-            margin-top: auto;
-        }
-
-        @media (max-width: 768px) {
-            .login-section, .register-section, .app-section {
-                padding: 25px;
-                margin: 15px;
-            }
-            h1 { font-size: 2rem; }
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <header>
-            <h1> OpenPayments</h1>
-            <p class="tagline">Remesas Express — Rápido, Seguro y con KYC Integrado</p>
-        </header>
-
-        <!-- LOGIN SECTION -->
-        <section id="loginSection" class="login-section">
-            <h2> Iniciar Sesión</h2>
-            <form id="loginForm">
-                <label for="loginEmail">Correo Electrónico:</label>
-                <input type="email" id="loginEmail" required placeholder="tu@correo.com">
-
-                <label for="loginPassword">Contraseña:</label>
-                <input type="password" id="loginPassword" required placeholder="••••••••">
-
-                <button type="button" class="btn" onclick="loginUser()">Iniciar Sesión</button>
-                <p>¿No tienes cuenta? <button type="button" class="btn-link" onclick="showRegister()">Regístrate aquí</button></p>
-            </form>
-        </section>
-
-        <!-- REGISTER/KYC SECTION -->
-        <section id="registerSection" class="register-section hidden">
-            <h2> Registro y Verificación KYC</h2>
-            <form id="kycForm">
-                <label for="fullName">Nombre Completo:</label>
-                <input type="text" id="fullName" required placeholder="Ej: Juan Pérez">
-
-                <label for="regEmail">Correo Electrónico:</label>
-                <input type="email" id="regEmail" required placeholder="juan@ejemplo.com">
-
-                <label for="regPassword">Contraseña:</label>
-                <input type="password" id="regPassword" required placeholder="••••••••">
-
-                <label for="phone">Teléfono:</label>
-                <input type="tel" id="phone" required placeholder="+1 234 567 890">
-
-                <label for="idType">Tipo de Documento:</label>
-                <select id="idType" required>
-                    <option value="">-- Selecciona --</option>
-                    <option value="passport">Pasaporte</option>
-                    <option value="dni">DNI/Cédula</option>
-                    <option value="ssn">SSN/TIN</option>
-                </select>
-
-                <label for="idNumber">Número de Documento:</label>
-                <input type="text" id="idNumber" required placeholder="Ej: AB1234567">
-
-                <div>
-                    <button type="button" class="btn" onclick="submitKYC()"> Registro y Verificar KYC</button>
-                    <button type="button" class="btn btn-secondary" onclick="showLogin()">← Volver a Iniciar Sesión</button>
-                </div>
-            </form>
-            <div id="kycResult" class="result"></div>
-        </section>
-
-        <!-- MAIN APP SECTION (solo visible si está logueado) -->
-        <section id="appSection" class="app-section hidden">
-            <div style="text-align: right; margin-bottom: 20px;">
-                <button type="button" class="btn btn-danger" onclick="logoutUser()">Cerrar Sesión</button>
-            </div>
-
-            <h2> Bienvenido, <span id="userNameDisplay">Usuario</span></h2>
-
-            <!-- BOTONES PRINCIPALES CON FUNCIONALIDAD -->
-            <div style="margin: 30px 0; text-align: center;">
-                <button type="button" class="btn" onclick="showRemittanceForm()">Enviar Remesa</button>
-                <button type="button" class="btn btn-secondary" onclick="calculateFee()">Calcular Costo</button>
-                <button type="button" class="btn btn-success" onclick="loadRemittances()"> Actualizar Lista</button>
-            </div>
-
-            <!-- FORMULARIO PARA ENVIAR REMESA (oculto por defecto) -->
-            <div id="remittanceFormContainer" class="hidden">
-                <h3> Formulario de Envío de Remesa</h3>
-                <form id="remittanceForm">
-                    <label for="recipientName">Nombre del Destinatario:</label>
-                    <input type="text" id="recipientName" required placeholder="María López">
-
-                    <label for="recipientCountry">País de Destino:</label>
-                    <input type="text" id="recipientCountry" required placeholder="México, Colombia, España...">
-
-                    <label for="amount">Monto a Enviar (USD):</label>
-                    <input type="number" id="amount" min="1" step="0.01" required placeholder="100.00">
-
-                    <label for="paymentMethod">Método de Pago:</label>
-                    <select id="paymentMethod" required>
-                        <option value="">-- Selecciona --</option>
-                        <option value="CREDIT_CARD">Tarjeta de Crédito</option>
-                        <option value="BANK_TRANSFER">Transferencia Bancaria</option>
-                        <option value="WALLET">Billetera Digital</option>
-                    </select>
-
-                    <div style="margin-top: 20px;">
-                        <button type="button" class="btn" onclick="createRemittance()"> Enviar Remesa</button>
-                        <button type="button" class="btn btn-secondary" onclick="hideRemittanceForm()">Cancelar</button>
-                    </div>
-                </form>
-                <div id="remittanceResult" class="result"></div>
-            </div>
-
-            <!-- HISTORIAL DE REMESAS -->
-            <h3> Historial de Remesas</h3>
-            <div id="remittancesList" class="grid">
-                <p>Cargando tus remesas...</p>
-            </div>
-        </section>
-    </div>
-
-    <footer>
-        <p>OpenPayments © 2025 — Sistema de Remesas Express con KYC/AML Integrado</p>
-        <p>Latencia media < 5 min • Conciliación automática >95% • Errores < 0.5%</p>
-    </footer>
-
-    <script>
-        // Simulamos un "backend" con localStorage
-        const simulateBackend = {
-            init() {
-                if (!localStorage.getItem('openpayments_users')) {
-                    localStorage.setItem('openpayments_users', JSON.stringify([]));
-                }
-                if (!localStorage.getItem('openpayments_remit')) {
-                    localStorage.setItem('openpayments_remit', JSON.stringify([]));
-                }
-                if (!localStorage.getItem('openpayments_audit')) {
-                    localStorage.setItem('openpayments_audit', JSON.stringify([]));
-                }
-            },
-
-            saveUser(user) {
-                const users = JSON.parse(localStorage.getItem('openpayments_users') || '[]');
-                users.push(user);
-                localStorage.setItem('openpayments_users', JSON.stringify(users));
-                return user;
-            },
-
-            findUserByEmail(email) {
-                const users = JSON.parse(localStorage.getItem('openpayments_users') || '[]');
-                return users.find(u => u.email === email);
-            },
-
-            saveRemittance(remittance) {
-                const remits = JSON.parse(localStorage.getItem('openpayments_remit') || '[]');
-                remits.push(remittance);
-                localStorage.setItem('openpayments_remit', JSON.stringify(remits));
-                return remittance;
-            },
-
-            saveAuditLog(log) {
-                const logs = JSON.parse(localStorage.getItem('openpayments_audit') || '[]');
-                logs.push(log);
-                localStorage.setItem('openpayments_audit', JSON.stringify(logs));
-            },
-
-            getAllRemittancesByUser(userId) {
-                return JSON.parse(localStorage.getItem('openpayments_remit') || '[]')
-                    .filter(r => r.userId === userId);
-            }
-        };
-
-        // Inicializamos el "backend"
-        simulateBackend.init();
-
-        // Estado de la aplicación
-        let currentUser = null;
-
-        // Función para mostrar login
-        function showLogin() {
-            document.getElementById('loginSection').classList.remove('hidden');
-            document.getElementById('registerSection').classList.add('hidden');
-            document.getElementById('appSection').classList.add('hidden');
-        }
-
-        // Función para mostrar registro
-        function showRegister() {
-            document.getElementById('loginSection').classList.add('hidden');
-            document.getElementById('registerSection').classList.remove('hidden');
-        }
-
-        // Función para mostrar la app principal
-        function showApp(user) {
-            currentUser = user;
-            document.getElementById('userNameDisplay').textContent = user.fullName;
-            document.getElementById('loginSection').classList.add('hidden');
-            document.getElementById('registerSection').classList.add('hidden');
-            document.getElementById('appSection').classList.remove('hidden');
-            loadRemittances(); // Cargamos remesas al entrar
-        }
-
-        // LOGIN
-        function loginUser() {
-            const email = document.getElementById('loginEmail').value.trim();
-            const password = document.getElementById('loginPassword').value;
-
-            if (!email || !password) {
-                alert("Por favor completa todos los campos.");
-                return;
-            }
-
-            const user = simulateBackend.findUserByEmail(email);
-            if (!user || user.password !== password) {
-                alert("Credenciales incorrectas. Por favor, verifica tu correo y contraseña.");
-                return;
-            }
-
-            showApp(user);
-        }
-
-        // REGISTRO Y KYC
-        function submitKYC() {
-            const fullName = document.getElementById('fullName').value.trim();
-            const email = document.getElementById('regEmail').value.trim();
-            const password = document.getElementById('regPassword').value;
-            const phone = document.getElementById('phone').value.trim();
-            const idType = document.getElementById('idType').value;
-            const idNumber = document.getElementById('idNumber').value.trim();
-
-            if (!fullName || !email || !password || !phone || !idType || !idNumber) {
-                alert("Por favor completa todos los campos.");
-                return;
-            }
-
-            // Verificar si el correo ya existe
-            if (simulateBackend.findUserByEmail(email)) {
-                alert("Este correo ya está registrado. Por favor, inicia sesión.");
-                return;
-            }
-
-            const user = {
-                id: 'user_' + Date.now(),
-                fullName,
-                email,
-                password, // En un sistema real, se guardaría hasheada
-                phone,
-                idType,
-                idNumber,
-                kycStatus: 'VERIFIED',
-                createdAt: new Date().toISOString()
-            };
-
-            simulateBackend.saveUser(user);
-            simulateBackend.saveAuditLog({
-                action: 'USER_KYC_VERIFIED',
-                performedBy: user.id,
-                statusAfter: 'VERIFIED',
-                createdAt: new Date().toISOString()
-            });
-
-            const resultDiv = document.getElementById('kycResult');
-            resultDiv.innerHTML = `
-                <h3> ¡Registro y KYC Verificado!</h3>
-                <p><strong>Usuario:</strong> ${user.fullName}</p>
-                <p><strong>Estado:</strong> <span class="status-badge status-validated">Verificado</span></p>
-                <p><strong>ID:</strong> ${user.id}</p>
-                <p>Redirigiendo al inicio de sesión...</p>
-            `;
-            resultDiv.style.display = "block";
-
-            setTimeout(() => {
-                showLogin();
-                document.getElementById('loginEmail').value = email;
-                document.getElementById('loginPassword').value = password;
-                alert("¡Registro completado! Ahora puedes iniciar sesión.");
-            }, 2000);
-        }
-
-        // CERRAR SESIÓN
-        function logoutUser() {
-            currentUser = null;
-            showLogin();
-            document.getElementById('loginEmail').value = '';
-            document.getElementById('loginPassword').value = '';
-        }
-
-        // MOSTRAR/OCULTAR FORMULARIO DE REMESA
-        function showRemittanceForm() {
-            document.getElementById('remittanceFormContainer').classList.remove('hidden');
-        }
-
-        function hideRemittanceForm() {
-            document.getElementById('remittanceFormContainer').classList.add('hidden');
-            document.getElementById('remittanceForm').reset();
-            document.getElementById('remittanceResult').style.display = 'none';
-        }
-
-        // CALCULAR COSTO
-        function calculateFee() {
-            const amountInput = document.getElementById('amount');
-            const amount = parseFloat(amountInput ? amountInput.value : 0);
-
-            if (!amount || amount <= 0) {
-                alert("Ingresa un monto válido en el formulario de remesa.");
-                showRemittanceForm();
-                return;
-            }
-
-            const fee = amount * 0.03 + 2.5;
-            const total = amount + fee;
-
-            const resultDiv = document.getElementById('remittanceResult');
-            resultDiv.innerHTML = `
-                <h3> Cálculo de Costos</h3>
-                <p><strong>Monto a enviar:</strong> $${amount.toFixed(2)}</p>
-                <p><strong>Comisión (3% + $2.50):</strong> $${fee.toFixed(2)}</p>
-                <p><strong>Total a pagar:</strong> <strong style="color: #d9534f">$${total.toFixed(2)}</strong></p>
-            `;
-            resultDiv.style.display = "block";
-        }
-
-        // CREAR REMESA
-        function createRemittance() {
-            if (!currentUser) {
-                alert("Debes iniciar sesión primero.");
-                showLogin();
-                return;
-            }
-
-            const recipientName = document.getElementById('recipientName').value.trim();
-            const recipientCountry = document.getElementById('recipientCountry').value.trim();
-            const amount = parseFloat(document.getElementById('amount').value);
-            const paymentMethod = document.getElementById('paymentMethod').value;
-
-            if (!recipientName || !recipientCountry || !amount || !paymentMethod) {
-                alert("Completa todos los campos para enviar la remesa.");
-                return;
-            }
-
-            const fee = amount * 0.03 + 2.5;
-            const total = amount + fee;
-
-            const remittance = {
-                id: 'REM-' + Date.now(),
-                userId: currentUser.id,
-                recipientName,
-                recipientCountry,
-                amountUsd: amount,
-                feeUsd: fee,
-                totalUsd: total,
-                currency: 'USD',
-                status: 'CREATED',
-                paymentMethod,
-                transactionId: 'TXN-' + Math.random().toString(36).substr(2, 9).toUpperCase(),
-                createdAt: new Date().toISOString(),
-                updatedAt: new Date().toISOString()
-            };
-
-            simulateBackend.saveRemittance(remittance);
-            simulateBackend.saveAuditLog({
-                remittanceId: remittance.id,
-                action: 'REM_CREATE',
-                statusBefore: null,
-                statusAfter: 'CREATED',
-                performedBy: currentUser.id,
-                createdAt: new Date().toISOString()
-            });
-
-            // Simulamos flujo automático (como pide el documento)
-            setTimeout(() => {
-                remittance.status = 'VALIDATED';
-                simulateBackend.saveAuditLog({
-                    remittanceId: remittance.id,
-                    action: 'REM_VALIDATE',
-                    statusBefore: 'CREATED',
-                    statusAfter: 'VALIDATED',
-                    performedBy: 'SYSTEM',
-                    createdAt: new Date().toISOString()
-                });
-                loadRemittances(); // Actualizamos UI
-            }, 1000);
-
-            setTimeout(() => {
-                remittance.status = 'PAID';
-                simulateBackend.saveAuditLog({
-                    remittanceId: remittance.id,
-                    action: 'REM_PAY',
-                    statusBefore: 'VALIDATED',
-                    statusAfter: 'PAID',
-                    performedBy: 'SYSTEM',
-                    createdAt: new Date().toISOString()
-                });
-                loadRemittances();
-            }, 2000);
-
-            setTimeout(() => {
-                remittance.status = 'COMPLETED';
-                remittance.updatedAt = new Date().toISOString();
-                simulateBackend.saveAuditLog({
-                    remittanceId: remittance.id,
-                    action: 'REM_COMPLETE',
-                    statusBefore: 'PAID',
-                    statusAfter: 'COMPLETED',
-                    performedBy: 'SYSTEM',
-                    createdAt: new Date().toISOString()
-                });
-                loadRemittances();
-            }, 3000);
-
-            const resultDiv = document.getElementById('remittanceResult');
-            resultDiv.innerHTML = `
-                <h3>¡Remesa Creada!</h3>
-                <p><strong>ID de Remesa:</strong> ${remittance.id}</p>
-                <p><strong>Destinatario:</strong> ${remittance.recipientName}</p>
-                <p><strong>País:</strong> ${remittance.recipientCountry}</p>
-                <p><strong>Total:</strong> $${remittance.totalUsd.toFixed(2)}</p>
-                <p><strong>Estado:</strong> <span class="status-badge status-created">Creada</span> (se actualizará automáticamente)</p>
-            `;
-            resultDiv.style.display = "block";
-
-            // No ocultamos el formulario para que vean el resultado
-        }
-
-        // CARGAR REMESAS DEL USUARIO
-        function loadRemittances() {
-            if (!currentUser) return;
-
-            const remits = simulateBackend.getAllRemittancesByUser(currentUser.id);
-            const container = document.getElementById('remittancesList');
-            container.innerHTML = '';
-
-            if (remits.length === 0) {
-                container.innerHTML = '<p>No tienes remesas aún. ¡Crea tu primera remesa!</p>';
-                return;
-            }
-
-            remits.slice().reverse().forEach(rem => {
-                const statusClass = `status-${rem.status.toLowerCase()}`;
-                const card = document.createElement('div');
-                card.className = 'remittance-card';
-                card.innerHTML = `
-                    <div class="remittance-header">
-                        <div class="remittance-title">${rem.recipientName}</div>
-                        <span class="status-badge ${statusClass}">${rem.status}</span>
-                    </div>
-                    <div class="remittance-detail">
-                        <span class="detail-label">ID:</span>
-                        <span class="detail-value">${rem.id}</span>
-                    </div>
-                    <div class="remittance-detail">
-                        <span class="detail-label">País:</span>
-                        <span class="detail-value">${rem.recipientCountry}</span>
-                    </div>
-                    <div class="remittance-detail">
-                        <span class="detail-label">Monto:</span>
-                        <span class="detail-value">$${rem.amountUsd.toFixed(2)}</span>
-                    </div>
-                    <div class="remittance-detail">
-                        <span class="detail-label">Total:</span>
-                        <span class="detail-value">$${rem.totalUsd.toFixed(2)}</span>
-                    </div>
-                    <div class="remittance-detail">
-                        <span class="detail-label">Creada:</span>
-                        <span class="detail-value">${new Date(rem.createdAt).toLocaleString()}</span>
-                    </div>
-                `;
-                container.appendChild(card);
-            });
-        }
-
-        // Al cargar la página, mostramos login por defecto
-        document.addEventListener('DOMContentLoaded', function() {
-            showLogin();
-        });
-    </script>
-</body>
-</html>
+Remesas Express 
+________________________________________
+1) Declaración del problema 
+Los procesos actuales de envío de remesas son lentos, propensos a errores manuales y carecen de trazabilidad y controles KYC/AML integrados. Se requiere un servicio express implementado en Java que automatice la creación, validación y pago de remesas con baja latencia, alta disponibilidad y auditoría por transacción.
+________________________________________
+2) Impacto y beneficios para el negocio (resumen)
+•	Operacional: reducción de tiempos y errores; conciliación automática.
+•	Comercial: mejor experiencia del cliente → mayor retención; nuevos productos instantáneos.
+•	Riesgo/Regulatorio: trazabilidad completa y controles KYC/AML integrados.
+•	KPIs clave: latencia media < 5 min, conciliación automática >95%, errores <0,5%.
+________________________________________
+3) Descripción de la solución técnica (componentes — resumen)
+•	API Gateway / BFF (Spring Cloud Gateway) authentication, rate limiting.
+•	Servicio Core Remesas (Spring Boot) — CRUD y orquestación del flujo.
+•	Servicio Integración Pagos (Spring Boot) — adaptadores a pasarelas + Resilience4j.
+•	Servicio Usuarios / KYC — perfiles, carga de documentos (S3).
+•	Servicio de Conciliación — reglas y procesos batch/stream.
+•	Servicio Notificaciones — email/SMS/push.
+•	Bróker de Mensajería — RabbitMQ/Kafka para procesos asíncronos.
+•	BD Transaccional — PostgreSQL/MySQL.
+•	Almacenamiento de Documentos — S3 compatible.
+•	Frontend — React + TypeScript (PWA optional).
+•	Observabilidad — Micrometer/Prometheus, Jaeger, logs estructurados.
+•	IAM — OAuth2 / JWT.
+________________________________________
+4) Detalles de implementación técnica (qué se requiere — resumen)
+•	Backend (Java): Java 17+, Spring Boot 3.x, Spring Data JPA, transactions, Bean Validation.
+•	Integraciones: adaptadores por proveedor (Strategy), retries & circuit breaker (Resilience4j).
+•	Mensajería: RabbitMQ o Kafka; mensajes idempotentes y reintentos.
+•	BD: migraciones con Flyway/Liquibase; índices por estado/usuario; backups.
+•	Almacenamiento: S3 para documentos; políticas de acceso mínimo.
+•	Frontend: React + TypeScript, consumo de REST con JWT.
+•	CI/CD & Infra: Docker, docker-compose para dev, pipelines, build/test/scan.
+•	Tests: JUnit 5 + Mockito (unitarias), tests de integración para flows críticos.
+________________________________________
+5) Justificación de tecnologías (resumen)
+•	Java + Spring Boot: madurez, soporte transaccional y seguridad (adecuado para Fintech).
+•	Postgres/MySQL: ACID y escalabilidad conocida.
+•	RabbitMQ/Kafka: desacoplamiento y resiliencia.
+•	Resilience4j: tolerancia a fallos.
+•	React+TS: UX rápida y robusta.
+•	S3-compatible: durabilidad para documentos KYC.
+________________________________________
+6) Prototipo funcional completo — ¿qué incluye? (resumen)
+Entregable mínimo reproducible para pruebas locales y demostración:
+•	Backend Java (servicio Core + integración mínima) con endpoints REST: crear remesa, validar, iniciar pago, consultar estado.
+•	Frontend simple (React) para crear remesa y ver estado.
+•	Script BD (schema. SQL) para Crear tablas users, remittances, audit logs.
+•	Infra docker-compose.yml (Postgres, RabbitMQ, backend, frontend).
+•	Documentación técnica: README con pasos para compilar, ejecutar y mantener.
+•	Manual de usuario (resumido): registro, KYC, crear remesa, seguimiento.
+•	Pruebas unitarias ejemplo (JUnit + Mockito).
+•	PlantUML con diagrama de componentes y clases.
+•	Checklist de pasos pendientes (integraciones reales, pentest).
+________________________________________
+7) Seguridad — best practices 
+•	Autenticación: OAuth2/OIDC y JWT con expiración y rotación de claves.
+•	Transporte: TLS 1.2+ en todas las capas.
+•	Secrets: gestor de secretos (Vault / AWS Secrets Manager).
+•	Datos: cifrado en reposo (AES-256), no almacenar datos sensibles (PAN/CVV).
+•	Contenedores: imágenes oficiales, escaneo (Trivy), usuarios no-root.
+•	App: validación de entrada, saneamiento, rate limiting, logs enmascarados.
+•	Operaciones: backups, pruebas de restore, pentesting previo a producción.
+________________________________________
+8) Código fuente y scripts (qué recibirás — resumen)
+•	BE: proyecto Spring Boot con pom.xml, application.yml, entidades, repos, servicios, controladores y tests.
+•	FE: proyecto React con formulario de creación y panel de estado.
+•	DB Script: schema.sql (tablas mínimas).
+•	Infra: docker-compose.yml para levantar stack local.
+•	Instrucciones: README con pasos: crear BD → mvn package → java -jar → npm install && npm start o docker-compose up --build.
+Nota: puedo generar y entregar al instante los archivos listos para descargar (backend completo, docker-compose.yml, schema.sql y frontend). Dime cuál quieres primero y te lo genero.
+________________________________________
+9) Documentación adicional 
+Incluye: diccionario de datos, PlantUML, contratos de mensajes (ejemplo JSON), OpenAPI/Swagger sugerido, registros de pruebas unitarias (salida mvn test) y manual de usuario.
+________________________________________
+Si quieres, genero ahora inmediatamente (en esta respuesta) uno de los siguientes artefactos listos para descargar:
+•	
+1.	schema.sql completo,
+•	
+2.	docker-compose.yml para dev,
+•	
+3.	backend completo (archivo ZIP o carpeta con archivos principales),
+•	
+4.	frontend mínimo (CreateRemittance.tsx + package. json),
+•	
+5.	OpenAPI/Swagger para los endpoints principales.
+.
